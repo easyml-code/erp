@@ -3,13 +3,12 @@ import InvoiceTableRow from './InvoiceTableRow';
 
 const InvoiceTableHeader = () => {
   const headers = [
-    'Invoice ID',
-    'Customer',
-    'Email',
+    'Invoice Number',
+    'PO Number',
+    'Vendor',
     'Amount',
-    'Status',
-    'Date',
-    'Due Date'
+    'Status', 
+    'Invoice Date'
   ];
 
   return (
@@ -31,16 +30,12 @@ const InvoiceTableHeader = () => {
 const InvoiceTable = ({ invoices }) => {
   return (
     <div className="bg-white shadow rounded-lg overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-200">
-        <h2 className="text-lg font-semibold text-gray-800">Invoices</h2>
-      </div>
-      
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <InvoiceTableHeader />
           <tbody className="bg-white divide-y divide-gray-200">
             {invoices.map((invoice) => (
-              <InvoiceTableRow key={invoice.id} invoice={invoice} />
+              <InvoiceTableRow key={invoice.invoiceNumber} invoice={invoice} />
             ))}
           </tbody>
         </table>
