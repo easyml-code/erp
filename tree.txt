@@ -1,0 +1,24 @@
+src/
+├── components/
+│   ├── auth/
+│   │   ├── LoginForm.jsx
+│   │   └── LoginPage.jsx
+│   ├── navigation/
+│   │   ├── Navbar.jsx
+│   │   ├── NavigationTabs.jsx
+│   │   └── UserAvatar.jsx
+│   ├── invoices/
+│   │   ├── InvoiceTable.jsx
+│   │   ├── InvoiceTableRow.jsx
+│   │   └── InvoicesTab.jsx
+│   ├── products/
+│   │   └── ProductsTab.jsx
+│   └── common/
+│       └── SearchBar.jsx
+├── utils/
+│   └── helpers.js
+├── data/
+│   └── dummyData.js
+├── pages/
+│   └── InvoicePage.jsx
+└── App.jsx
