@@ -7,7 +7,7 @@ const transformInvoiceData = (supabaseData) => {
     poNumber: invoice.po_number,
     vendorId: invoice.vendor_id,
     vendorName: invoice.vendor_name || 'N/A',
-    amount: parseFloat(invoice.invoice_total || 0), // Keep original amount
+    amount: parseFloat(invoice.invoice_total || 0),
     status: invoice.payment_status || 'Unknown',
     invoiceDate: invoice.invoice_date || 'N/A',
     dueDate: invoice.due_date || 'N/A',
@@ -30,7 +30,9 @@ export const fetchAllInvoices = async () => {
     const { data, error } = await supabase
       .from('invoice_details')
       .select('*')
-      .order('invoice_date', { ascending: false });
+      .order('invoice_date', { ascending: false })
+      .order('vendor_name', { ascending: true })
+      .order('po_number', { ascending: true });
 
     if (error) {
       throw error;
@@ -60,6 +62,8 @@ export const fetchInvoicesPaginated = async (page = 1, limit = 10) => {
       .from('invoice_details')
       .select('*', { count: 'exact' })
       .order('invoice_date', { ascending: false })
+      .order('vendor_name', { ascending: true })
+      .order('po_number', { ascending: true })
       .range(from, to);
 
     if (error) {

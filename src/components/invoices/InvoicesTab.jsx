@@ -1,6 +1,5 @@
-import React from 'react';
-import { RefreshCw, Download } from 'lucide-react';
-import SearchBar from '../common/SearchBar';
+import React, { useState } from 'react';
+import { RefreshCw, Download, Search } from 'lucide-react';
 import InvoiceTable from './InvoiceTable';
 import { downloadCSV } from '../../utils/csvUtils';
 
@@ -109,8 +108,9 @@ const InvoicesTab = ({
   isSearching,
   allInvoices
 }) => {
+  const [showSearch, setShowSearch] = useState(false);
+
   const handleDownloadCSV = () => {
-    // If searching, download filtered results; otherwise download all data
     const dataToDownload = isSearching ? filteredInvoices : allInvoices;
     const fileName = `invoices_${new Date().toISOString().split('T')[0]}.csv`;
     downloadCSV(dataToDownload, fileName);
@@ -118,32 +118,52 @@ const InvoicesTab = ({
 
   return (
     <>
+      {/* Top Bar */}
       <div className="flex justify-between items-center mb-6">
-        <SearchBar 
-          searchTerm={searchTerm} 
-          setSearchTerm={setSearchTerm}
-          placeholder="Search invoices..."
-        />
-        <div className="flex space-x-2">
+          {/* Left: Search */}
+          <div>
+          {showSearch ? (
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search invoices..."
+              className="border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+              autoFocus
+              onBlur={() => !searchTerm && setShowSearch(false)}
+            />
+          ) : (
+            <button
+              onClick={() => setShowSearch(true)}
+              className="p-2 border border-gray-300 rounded-md bg-white hover:bg-gray-50"
+            >
+              <Search className="w-4 h-4 text-gray-600" />
+            </button>
+          )}
+          </div>
+
+          {/* Right: CSV + Refresh */}
+          <div className="flex items-center space-x-2">
           <button
             onClick={handleDownloadCSV}
             disabled={loading || (!isSearching && allInvoices.length === 0) || (isSearching && filteredInvoices.length === 0)}
-            className="flex items-center px-4 py-2 bg-green-300 text-white rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200"
+            className="p-2 border border-gray-300 rounded-md bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Download className="w-4 h-4 mr-2" />
-            CSV
+            <Download className="w-4 h-4 text-gray-600" />
           </button>
+
+          {/* Refresh */}
           <button
             onClick={onRefresh}
             disabled={loading}
-            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200"
+            className="p-2 border border-gray-300 rounded-md bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-            Refresh
+            <RefreshCw className={`w-4 h-4 text-gray-600 ${loading ? 'animate-spin' : ''}`} />
           </button>
         </div>
       </div>
 
+      {/* Errors */}
       {error && (
         <div className="mb-6 bg-red-50 border border-red-200 rounded-md p-4">
           <div className="flex">
@@ -165,6 +185,7 @@ const InvoicesTab = ({
         </div>
       )}
 
+      {/* Searching info */}
       {isSearching && (
         <div className="mb-4 bg-blue-50 border border-blue-200 rounded-md p-3">
           <p className="text-sm text-blue-700">
@@ -173,6 +194,7 @@ const InvoicesTab = ({
         </div>
       )}
 
+      {/* Table */}
       {loading ? (
         <div className="bg-white shadow rounded-lg p-8">
           <div className="flex items-center justify-center">
