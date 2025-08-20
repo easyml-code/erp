@@ -122,7 +122,6 @@ const InvoicesTab = ({
       <div className="flex justify-between items-center mb-6">
           {/* Left: Search */}
           <div>
-          {showSearch ? (
             <input
               type="text"
               value={searchTerm}
@@ -132,36 +131,49 @@ const InvoicesTab = ({
               autoFocus
               onBlur={() => !searchTerm && setShowSearch(false)}
             />
-          ) : (
-            <button
-              onClick={() => setShowSearch(true)}
-              className="p-2 border border-gray-300 rounded-md bg-white hover:bg-gray-50"
-            >
-              <Search className="w-4 h-4 text-gray-600" />
-            </button>
-          )}
           </div>
 
           {/* Right: CSV + Refresh */}
-          <div className="flex items-center space-x-2">
-          <button
-            onClick={handleDownloadCSV}
-            disabled={loading || (!isSearching && allInvoices.length === 0) || (isSearching && filteredInvoices.length === 0)}
-            className="p-2 border border-gray-300 rounded-md bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <Download className="w-4 h-4 text-gray-600" />
-          </button>
+          
+            <div className="flex items-center space-x-2">
+              {/* CSV Export */}
+              <div className="relative group">
+                <button
+                  onClick={handleDownloadCSV}
+                  disabled={
+                    loading ||
+                    (!isSearching && allInvoices.length === 0) ||
+                    (isSearching && filteredInvoices.length === 0)
+                  }
+                  className="p-2 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Download className="w-4 h-4 text-gray-600" />
+                </button>
 
-          {/* Refresh */}
-          <button
-            onClick={onRefresh}
-            disabled={loading}
-            className="p-2 border border-gray-300 rounded-md bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <RefreshCw className={`w-4 h-4 text-gray-600 ${loading ? 'animate-spin' : ''}`} />
-          </button>
-        </div>
-      </div>
+                {/* Tooltip */}
+                <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-max px-2 py-1 text-xs text-white bg-gray-800 rounded opacity-0 group-hover:opacity-100 transition duration-200">
+                  Export
+                </div>
+              </div>
+
+              {/* Refresh */}
+              <div className="relative group">
+                <button
+                  onClick={onRefresh}
+                  disabled={loading}
+                  className="p-2 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <RefreshCw className={`w-4 h-4 text-gray-600 ${loading ? 'animate-spin' : ''}`} />
+                </button>
+
+                {/* Tooltip */}
+                <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-max px-2 py-1 text-xs text-white bg-gray-800 rounded opacity-0 group-hover:opacity-100 transition duration-200">
+                  Refresh
+                </div>
+              </div>
+            </div>
+          </div>
+ 
 
       {/* Errors */}
       {error && (
